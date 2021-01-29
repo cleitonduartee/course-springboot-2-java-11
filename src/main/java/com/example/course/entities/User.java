@@ -7,6 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.course.services.UserService;
+
 @Entity //Anotação do JPA para converter o obj para modelo relacional
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
