@@ -11,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_product")
@@ -31,6 +34,9 @@ public class Product implements Serializable {
 	//Essa Anotação JoinTable cria um tabela de relacionamento entre product e category, pois essa relação é: muitos para muitos.
 	private Set<Category> categories = new HashSet<>();
 
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<>();
+	
 	public Product() {
 
 	}
@@ -85,6 +91,14 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+	@JsonIgnore
+	public Set<Order> getOrders(){
+		Set<Order> list = new HashSet<>();
+		for(OrderItem x : items) {
+			list.add(x.getOrder());
+		}
+		return list;
 	}
 
 	@Override
