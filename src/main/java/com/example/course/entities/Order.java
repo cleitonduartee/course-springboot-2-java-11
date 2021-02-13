@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import com.example.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_order")
@@ -37,6 +38,7 @@ public class Order implements Serializable {
 				// anotação faz esse relacionamento criando a chave estrangeira
 	@JoinColumn(name = "client_id") // @anotação para criar o nome da coluna referente a chave estrangeira
 	private User client;
+	
 	
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
@@ -93,13 +95,21 @@ public class Order implements Serializable {
 		return items;
 	}
 	
-
+	@JsonIgnore
 	public Payment getPayment() {
 		return payment;
 	}
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
+	}
+	
+	public Double getTotal() {
+		double sum = 0.0;
+		for(OrderItem x : items) {
+			sum += x.getSubTotal();
+		}
+		return sum;
 	}
 
 	@Override
